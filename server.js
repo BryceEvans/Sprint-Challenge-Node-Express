@@ -15,11 +15,6 @@ server.get('/', (req, res) => {
     res.json({ message: "Up and running and running." })
 });
 
-
-
-
-
-
 // Always on bottom!
 server.listen(PORT, () => {
     console.log(`Server up and running on ${PORT}`)

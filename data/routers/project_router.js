@@ -18,4 +18,21 @@ router.get('/', (req, res) => {
     });
 });
 
+router.get('/:id', (req, res) => {
+    const { id } = req.params;
+    projectDB.get(id)
+    .then(project => {
+        if (project) {
+            res.json(project);
+        } else {
+            res.status(404)
+            .json({ error: "The action with the specified ID does not exist."})
+        }
+    })
+    .catch(err => {
+        res.status(500)
+        .json({ message: "The action information could not be retrieved." })
+    });
+});
+
 module.exports = router;

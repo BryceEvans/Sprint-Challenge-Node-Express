@@ -35,4 +35,25 @@ router.get('/:id', (req, res) => {
     });
 });
 
+router.post('/', (req, res) => {
+    const newAction = req.body;
+    if (newAction.project_id && newAction.description && newAction.notes) {
+        actionDB.insert(newAction)
+        .then(idInfo => {
+            actionDB.get(idInfo.id)
+            .then(action => {
+                res.status(201)
+                .json(action);
+            })
+        })
+        .catch(err => {
+            res.status(500)
+            .json({ message: "There was an error while saving the action to the database." })
+        })
+    } else {
+        res.status(400)
+        .json({ message: "Provide the action project_id, description, and notes." })
+    }
+});
+
 module.exports = router;

@@ -73,4 +73,27 @@ router.delete('/:id', (req, res) => {
     })
 })
 
+router.put('/:id', (req, res) => {
+    const editAction = req.body;
+    const { id } = req.params;
+    if (editAction) {
+        actionDB.update(id, editAction)
+        .then(count => {
+            if (count) {
+                res.json({ message: "The action was updated." });
+            } else {
+                res.status(400)
+                .json({ message: "The action with the specified ID does not exist." })
+            }
+        })
+        .catch(err => {
+            res.status(500)
+            .json({ message: "The action infomration could not be updated." })
+        })
+    } else {
+        res.status(400)
+        .json({ message: "Provide action project_id, description, and notes." })
+    }
+})
+
 module.exports = router;

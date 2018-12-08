@@ -73,4 +73,44 @@ router.delete('/:id', (req, res) => {
     })
 })
 
+router.put('/:id', (req, res) => {
+    const editProject = req.body;
+    const { id } = req.params;
+    if (editProject) {
+        projectDB.update(id, editProject)
+        .then(count => {
+            if (count) {
+                res.json({ message: "The project was updated." })
+            } else {
+                res.status(400)
+                .json({ message: "The project with the specified ID does not exist." })
+            }
+        })
+        .catch(err => {
+            res.status(500)
+            .json({ message: "The project information could not be updated." })
+        })
+    } else {
+        res.status(400)
+        .json({ message: "Provide the project name and description." })
+    }
+})
+
+router.get('/:id/actions', (req, res) => {
+    const { id } = req.params;
+    projectDB.getProjectActions(id)
+    .then(actions => {
+        if (actions.length > 0) {
+            res.json(actions);
+        } else {
+            res.status(404)
+            .json({ message: "The project with the specified ID does not exist." });
+        }
+    })
+    .catch(err => {
+        res.status(500)
+        .json({ message: "The project's actions could not be retireved." });
+    })
+});
+
 module.exports = router;
